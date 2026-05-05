@@ -31,6 +31,9 @@ rows = []
 try:
     res = sb.table("events").select("*").order("starts_at").execute()
     rows = res.data or []
+    # Component E: contract-style checks on Supabase → app pipeline
+    assert isinstance(rows, list), "events query must return a list"
+    assert all(isinstance(r, dict) for r in rows), "each event row must be a dict"
     cats = sorted({r.get("category") for r in rows if r.get("category")})
     categories = ["All"] + cats
 except Exception as e:
